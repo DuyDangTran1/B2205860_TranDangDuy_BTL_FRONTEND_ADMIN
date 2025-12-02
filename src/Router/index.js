@@ -44,18 +44,35 @@ router.beforeEach(async (to, formatPostcssSourceMap, next) => {
       const refresh = await refreshToken();
       if (refresh != "oke") return next("/dashboard/login");
     }
+
+    // Còn thiếu nếu có accessToken nhưng hết hạn với refreshToken hết hạn thì đẩy về
+    // /dashboard/login
+    // .......
+
+    //nếu có accessToken mà không phải đọc giả thì quay lại login
+
+    // nếu có accessToken và path là login thì đưa về /
+    const check_employee = await fetch(
+      "http://localhost:3000/api/dashboard/isEmployee",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+        credentials: "include",
+      }
+    );
+    if (accessToken && to.path != "/dashboard/login") {
+      if (check_employee.status != 200) {
+        sessionStorage.removeItem("accessToken");
+        return next("/dashboard/login");
+      }
+    }
+
+    //Các trường hợp khác thì bỏ qua
+    next();
   } catch (error) {
     return next("/dashboard/login");
   }
-
-  // Còn thiếu nếu có accessToken nhưng hết hạn với refreshToken hết hạn thì đẩy về
-  // /dashboard/login
-  // .......
-
-  // nếu có accessToken và path là login thì đưa về /
-  if (accessToken && to.path == "/dashboard/login") return next("/");
-
-  //Các trường hợp khác thì bỏ qua
-  next();
 });
 export default router;
