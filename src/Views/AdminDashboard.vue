@@ -23,6 +23,17 @@
             Quản lý sách
           </RouterLink>
         </li>
+
+        <li class="nav-item mb-2">
+          <RouterLink
+            to="/admin/statistical"
+            class="nav-link text-white"
+            active-class="active"
+          >
+            Thống kê
+          </RouterLink>
+        </li>
+
         <li class="nav-item mb-2">
           <RouterLink
             to="/admin/users"
@@ -36,15 +47,31 @@
     </nav>
 
     <main class="flex-grow-1 p-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold">Trang quản trị</h3>
-        <div class="d-flex align-items-center gap-2">
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="avatar"
-            class="rounded-circle"
-          />
-          <span class="fw-semibold">Admin</span>
+      <div class="mb-4 text-end">
+        <div class="dropdown d-inline-block">
+          <button
+            class="btn p-0 border-0 dropdown-toggle d-flex align-items-center gap-2"
+            type="button"
+            id="adminDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="https://i.pravatar.cc/40"
+              alt="avatar"
+              class="rounded-circle"
+            />
+            <span class="fw-semibold">Admin</span>
+          </button>
+
+          <ul
+            class="dropdown-menu dropdown-menu-end shadow mt-2"
+            aria-labelledby="adminDropdown"
+          >
+            <li class="text-center">
+              <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+            </li>
+          </ul>
         </div>
       </div>
 
