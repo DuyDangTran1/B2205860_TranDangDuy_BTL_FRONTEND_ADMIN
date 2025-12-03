@@ -3,6 +3,7 @@ import AdminDashboard from "@/Views/AdminDashboard.vue";
 import AdminPending from "@/components/AdminPending.vue";
 import AdminBooks from "@/components/AdminBook.vue";
 import AdminUsers from "@/components/AdminUsers.vue";
+import Statistical from "@/components/Statistical.vue";
 import { refreshToken } from "@/api/token";
 
 const routes = [
@@ -13,6 +14,7 @@ const routes = [
       { path: "pending", component: AdminPending },
       { path: "books", component: AdminBooks },
       { path: "users", component: AdminUsers },
+      { path: "statistical", component: Statistical },
       { path: "/", redirect: "/admin/pending" },
     ],
   },
