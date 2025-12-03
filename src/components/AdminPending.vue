@@ -59,6 +59,7 @@ const loadBorrowRequest = async () => {
 const autoUpdate = async () => {
   try {
     const res = await fetch(`http://localhost:3000/api/dashboard/autoupdate`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
