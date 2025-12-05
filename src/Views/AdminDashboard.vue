@@ -1,4 +1,11 @@
-<script></script>
+<script setup>
+import { useRouter } from "vue-router";
+const router = useRouter();
+const logOut = () => {
+  sessionStorage.removeItem("adToken");
+  router.push("/dashboard/login");
+};
+</script>
 
 <template>
   <div class="d-flex min-vh-100">
@@ -68,7 +75,7 @@
             class="dropdown-menu dropdown-menu-end shadow mt-2"
             aria-labelledby="adminDropdown"
           >
-            <li class="text-center">
+            <li class="text-center" v-on:click="logOut">
               <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
             </li>
           </ul>
