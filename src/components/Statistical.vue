@@ -37,7 +37,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 
-// ChartJS imports... (giữ nguyên phần này)
 import {
   Chart as ChartJS,
   BarElement,
@@ -59,7 +58,6 @@ ChartJS.register(
   Legend
 );
 
-// ====================== DATA ======================
 const selectedChart = ref("status");
 
 const borrowChartData = ref({
@@ -92,11 +90,9 @@ const statusChartData = ref({
   ],
 });
 
-// ====================== FETCH API ======================
 async function loadStatistics() {
-  // ... (giữ nguyên logic fetch API)
   try {
-    const token = sessionStorage.getItem("accessToken");
+    const token = sessionStorage.getItem("adToken");
 
     const res = await fetch("http://localhost:3000/api/dashboard/statistics", {
       headers: {
@@ -157,7 +153,6 @@ onMounted(() => {
   loadStatistics();
 });
 
-// ====================== CHỌN BIỂU ĐỒ & TIÊU ĐỀ ======================
 const currentChartData = computed(() => {
   if (selectedChart.value === "borrow") return borrowChartData.value;
   if (selectedChart.value === "late") return lateChartData.value;
@@ -172,7 +167,6 @@ const chartTitle = computed(() => {
   return "Tỷ lệ trạng thái các yêu cầu mượn sách";
 });
 
-// ====================== OPTIONS ======================
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -205,12 +199,9 @@ const chartOptions = {
   max-width: 1000px;
 }
 
-/* Bố cục Header: Tiêu đề và Dropdown nằm ngang */
 .header-section {
-  /* d-flex, align-items-center, justify-content-between đã được thêm vào template */
 }
 
-/* Dropdown chỉ rộng bằng nội dung */
 .dropdown-wrapper select {
   width: 250px !important; /* Đặt chiều rộng cố định cho dropdown */
   min-width: 200px;
@@ -228,14 +219,12 @@ const chartOptions = {
   align-items: center;
 }
 
-/* 🟦 Bar Chart (Mượn/Trả muộn) - Chiếm không gian ngang tốt hơn */
 .chart-box {
   width: 90%;
   max-width: 700px; /* Giới hạn để không quá rộng */
   height: 400px;
 }
 
-/* 🍩 Doughnut Chart (Trạng thái) - Cân đối hình tròn */
 .doughnut-box {
   width: 100%;
   max-width: 400px;
