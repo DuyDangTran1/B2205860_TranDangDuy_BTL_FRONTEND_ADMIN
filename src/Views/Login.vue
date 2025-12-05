@@ -31,7 +31,7 @@ async function handleLogin() {
     }
 
     // Lưu token vào sessionStorage
-    sessionStorage.setItem("accessToken", data.accessToken);
+    sessionStorage.setItem("adToken", data.accessToken);
 
     // Chuyển sang dashboard
     router.push("/");
