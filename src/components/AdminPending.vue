@@ -4,7 +4,7 @@ import { refreshToken } from "@/api/token";
 
 const borrow_requests = ref([]);
 const isLoading = ref(true);
-const accessToken = sessionStorage.getItem("accessToken");
+const accessToken = sessionStorage.getItem("adToken");
 
 // Trạng thái cho nút hành động
 const statusBtn = {
