@@ -4,7 +4,9 @@ import AdminPending from "@/components/AdminPending.vue";
 import AdminBooks from "@/components/AdminBook.vue";
 import AdminUsers from "@/components/AdminUsers.vue";
 import Statistical from "@/components/Statistical.vue";
+import AddBook from "@/components/AddBook.vue";
 import { refreshToken } from "@/api/token";
+import EditBook from "@/components/EditBook.vue";
 
 const routes = [
   {
@@ -29,6 +31,14 @@ const routes = [
     name: "notfound",
     component: () => import("../Views/Error404.vue"),
   },
+  {
+    path: "/admin/books/add",
+    component: AddBook,
+  },
+  {
+    path: "/admin/books/edit/:id",
+    component: EditBook,
+  },
 ];
 
 const router = createRouter({
@@ -36,45 +46,45 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, formatPostcssSourceMap, next) => {
-  let accessToken = sessionStorage.getItem("accessToken");
-
+router.beforeEach(async (to, from, next) => {
   try {
-    //Nếu không có accessToken thì thử refesh lại
+    let accessToken = sessionStorage.getItem("adToken");
+
+    // 1. Nếu vào login → cho qua luôn
+    if (to.path === "/dashboard/login") return next();
+
+    // 2. Nếu không có token → thử refresh
     if (!accessToken) {
-      if (to.path == "/dashboard/login") return next();
       const refresh = await refreshToken();
-      if (refresh != "oke") return next("/dashboard/login");
+      if (refresh !== "oke") return next("/dashboard/login");
+
+      // Lấy lại token mới sau refresh
+      accessToken = sessionStorage.getItem("adToken");
+      if (!accessToken) return next("/dashboard/login");
     }
 
-    // Còn thiếu nếu có accessToken nhưng hết hạn với refreshToken hết hạn thì đẩy về
-    // /dashboard/login
-    // .......
+    // 3. Chỉ check /admin routes
+    if (to.path.startsWith("/admin")) {
+      const resp = await fetch(
+        "http://localhost:3000/api/dashboard/isEmployee",
+        {
+          method: "GET",
+          headers: { Authorization: "Bearer " + accessToken },
+          credentials: "include",
+        }
+      );
 
-    //nếu có accessToken mà không phải đọc giả thì quay lại login
-
-    // nếu có accessToken và path là login thì đưa về /
-    const check_employee = await fetch(
-      "http://localhost:3000/api/dashboard/isEmployee",
-      {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-        credentials: "include",
-      }
-    );
-    if (accessToken && to.path != "/dashboard/login") {
-      if (check_employee.status != 200) {
-        sessionStorage.removeItem("accessToken");
-        return next("/dashboard/login");
+      if (resp.status !== 200) {
+        sessionStorage.removeItem("adToken"); // xóa đúng token
+        return next("/dashboard/login"); // trả về login và dừng guard
       }
     }
 
-    //Các trường hợp khác thì bỏ qua
-    next();
+    // 4. Các trường hợp khác → cho qua
+    return next();
   } catch (error) {
     return next("/dashboard/login");
   }
 });
+
 export default router;
